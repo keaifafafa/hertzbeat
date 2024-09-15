@@ -100,6 +100,7 @@ export class AlertSettingComponent implements OnInit {
   qbFormCtrl: FormControl;
 
   ngOnInit(): void {
+    debugger;
     this.loadAlertDefineTable();
     // query monitoring hierarchy
     const getHierarchy$ = this.appDefineSvc
@@ -138,6 +139,7 @@ export class AlertSettingComponent implements OnInit {
   }
 
   loadAlertDefineTable() {
+    debugger;
     this.tableLoading = true;
     let alertDefineInit$ = this.alertDefineSvc.getAlertDefines(this.search, this.pageIndex - 1, this.pageSize).subscribe(
       message => {
@@ -147,6 +149,7 @@ export class AlertSettingComponent implements OnInit {
         if (message.code === 0) {
           let page = message.data;
           this.defines = page.content;
+          console.log(this.defines);
           this.pageIndex = page.number + 1;
           this.total = page.totalElements;
         } else {
@@ -162,6 +165,7 @@ export class AlertSettingComponent implements OnInit {
   }
 
   onNewAlertDefine() {
+    debugger;
     this.define = new AlertDefine();
     this.define.tags = [];
     this.resetQbDataDefault();
@@ -673,7 +677,9 @@ export class AlertSettingComponent implements OnInit {
     this.isManageModalVisible = false;
   }
 
-  onManageModalOk() {
+  async onManageModalOk() {
+    const langs = this.i18nSvc.getLangs();
+    debugger;
     if (this.cascadeValues.length == 3) {
       this.defineForm.form.addControl('ruleset', this.qbFormCtrl);
     }
@@ -689,6 +695,26 @@ export class AlertSettingComponent implements OnInit {
     this.isManageModalOkLoading = true;
     this.define.app = this.cascadeValues[0];
     this.define.metric = this.cascadeValues[1];
+    // let result = new Map<string, string>();
+    const translationsObject: { [key: string]: string } = {};
+    // TODO set i18n content
+    const promises = langs.map(lang => {
+      if (this.define.metric === 'availability') {
+        return this.loadData(lang.code).then(async res => {
+          this.i18nSvc.use(lang.code, res);
+          const appText = this.i18nSvc.fanyi('monitor.app.' + this.define.app);
+          const availabilityText = this.i18nSvc.fanyi('monitor.availability');
+          translationsObject[lang.code] = `${appText} / ${availabilityText}`;
+          // result.set(lang.code, `${appText} / ${availabilityText}`);
+        });
+      } else {
+        return Promise.resolve();
+      }
+    });
+
+    await Promise.all(promises);
+    this.define.translations = JSON.stringify(translationsObject);
+    console.log(this.define.translations);
     if (this.cascadeValues.length == 3) {
       this.define.field = this.cascadeValues[2];
       if (!this.isExpr) {
@@ -856,6 +882,10 @@ export class AlertSettingComponent implements OnInit {
         return -1;
       }
     });
+  }
+
+  loadData(langCode: string): Promise<any> {
+    return this.i18nSvc.loadLangData(langCode).toPromise();
   }
   // end -- associate alert definition and monitoring model
 }

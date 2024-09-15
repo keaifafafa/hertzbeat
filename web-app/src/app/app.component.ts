@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    debugger;
     let configLoad = false;
     this.router.events.subscribe(ev => {
       if (ev instanceof RouteConfigLoadStart) {

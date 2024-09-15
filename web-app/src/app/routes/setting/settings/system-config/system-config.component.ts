@@ -77,6 +77,7 @@ export class SystemConfigComponent implements OnInit {
   }
 
   onSaveSystemConfig() {
+    debugger
     this.loading = true;
     const configOk$ = this.configService
       .saveGeneralConfig(this.config, 'system')
@@ -92,6 +93,7 @@ export class SystemConfigComponent implements OnInit {
             this.notifySvc.success(this.i18nSvc.fanyi('common.notify.apply-success'), '');
             let language = this.config.locale.replace('_', '-');
             this.i18nSvc.loadLangData(language).subscribe(res => {
+              console.log(res);
               this.i18nSvc.use(language, res);
               this.settings.setLayout('lang', language);
               setTimeout(() => this.doc.location.reload());

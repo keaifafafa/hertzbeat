@@ -189,6 +189,8 @@ public class AlertDefineServiceImpl implements AlertDefineService {
                                 criteriaBuilder.lower(root.get("template")),
                                 "%" + search.toLowerCase() + "%"
                         )
+                        // TODO i18n content search
+
                 );
                 andList.add(predicate);
             }

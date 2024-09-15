@@ -134,6 +134,11 @@ public class AlertDefine {
     @LastModifiedDate
     private LocalDateTime gmtUpdate;
 
+    @Schema(title = "i18n translations", example = "{\"en-US\":\"Prometheus Task / Monitor Availability\",\"zh-CN\":\"Prometheus任务 / 监控可用性\",\"zh-TW\":\"Prometheus任务 / 監控可用性\"}", accessMode = READ_WRITE)
+    @Size(max = 2048)
+    @NotNull
+    private String translations;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

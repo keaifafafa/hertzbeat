@@ -61,6 +61,7 @@ public class AlertDefinesController {
             @Parameter(description = "List current page", example = "0") @RequestParam(defaultValue = "0") int pageIndex,
             @Parameter(description = "Number of list pages", example = "8") @RequestParam(defaultValue = "8") int pageSize) {
         Page<AlertDefine> alertDefinePage = alertDefineService.getAlertDefines(ids, search, priority, sort, order, pageIndex, pageSize);
+        // TODO 进行翻译
         return ResponseEntity.ok(Message.success(alertDefinePage));
     }
 

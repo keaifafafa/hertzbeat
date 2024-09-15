@@ -90,11 +90,13 @@ export class AppDefineService {
   }
 
   public getAppHierarchy(lang: string | undefined): Observable<Message<any>> {
+    debugger;
     if (lang == undefined) {
       lang = 'en_US';
     }
     let httpParams = new HttpParams().append('lang', lang);
     const options = { params: httpParams };
+    console.log(`options value${options}`);
     return this.http.get<Message<any>>(app_hierarchy, options);
   }
 

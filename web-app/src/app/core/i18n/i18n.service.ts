@@ -19,7 +19,7 @@ import { enUS as dfEn, zhCN as dfZhCn, zhTW as dfZhTw } from 'date-fns/locale';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { en_US as zorroEnUS, NzI18nService, zh_CN as zorroZhCN, zh_TW as zorroZhTW } from 'ng-zorro-antd/i18n';
 import { Observable, zip } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { Message } from '../../pojo/Message';
 
@@ -108,6 +108,7 @@ export class I18NService extends AlainI18nBaseService {
   }
 
   use(lang: string, data: Record<string, unknown>): void {
+    debugger;
     this._data = this.flatData(data, []);
 
     const item = LANGS[lang];
@@ -117,6 +118,16 @@ export class I18NService extends AlainI18nBaseService {
     this.delonLocaleService.setLocale(item.delon);
     this._currentLang = lang;
 
+    this._change$.next(lang);
+  }
+
+  use2(lang: string): void {
+    debugger;
+    const item = LANGS[lang];
+    registerLocaleData(item.ng);
+    this.nzI18nService.setLocale(item.zorro);
+    this.nzI18nService.setDateLocale(item.date);
+    this.delonLocaleService.setLocale(item.delon);
     this._change$.next(lang);
   }
 

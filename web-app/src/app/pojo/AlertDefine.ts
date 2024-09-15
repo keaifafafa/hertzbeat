@@ -38,4 +38,6 @@ export class AlertDefine {
   modifier!: string;
   gmtCreate!: number;
   gmtUpdate!: number;
+  // i18n content
+  translations!: string;
 }
